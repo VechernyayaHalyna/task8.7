@@ -1,58 +1,21 @@
-// Кнопки
-let wantPlay = document.querySelector('#want-play');
-let start = document.querySelector('#submit');
-let gameButton = document.querySelector('#to-game');
+// Вводные данные
+let minValue = parseInt(prompt('Минимальное знание числа для игры', '-999'));
+let maxValue = parseInt(prompt('Максимальное знание числа для игры','999'));
+minValue < -999 ? minValue = -999 : minValue;
+maxValue > 999 ? maxValue = 1000 : maxValue;
 
-// Модальные окна
-let firstPage = document.querySelector('.greeting');
-let firstModal = document.querySelector('#modal-input');
-let secondModal = document.querySelector('#start');
-let gameModal = document.querySelector('.game-start');
+// Запуск игры
+alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
+let answerNumber  = Math.floor((minValue + maxValue) / 2); 
+let orderNumber = 1; 
+let gameRun = true; 
 
-
-// Игра
-let minValue = +document.querySelector('#min').value;
-let maxValue = +document.querySelector('#max').value;
-let userMin = document.querySelector('#user-min');
-let userMax = document.querySelector('#user-max');
-let answerNumber  = Math.floor((minValue + maxValue) / 2);
-let orderNumber = 1;
-let gameRun = true;
-
-// Поля игры
 let orderNumberField = document.querySelector('#orderNumberField');
 let answerField = document.querySelector('#answerField');
 
 orderNumberField.innerText = orderNumber;
 
-
-// Открытие первого модального окна
-wantPlay.addEventListener('click', () => {
-    firstModal.classList.add('modal-active');
-    firstPage.classList.add('greeting-non-active');
-})
-
-// Открытие второго модального окна
-start.addEventListener('click', () => {
-    firstModal.classList.remove('modal-active');
-    secondModal.classList.add('modal-active');
-
-    userMin = minValue;
-    userMax = maxValue; 
-
-    if ((isNaN(minValue) || isNaN(maxValue)) || ((typeof minValue != number) || (typeof maxValue != number))) {
-        minValue = 1;
-        maxValue = 100;
-    }
-})
-
-// Начало игры
-gameButton.addEventListener('click', () => {
-    secondModal.classList.remove('modal-active');
-    gameModal.classList.add('game-start-active');
-})
-
-
+// Варианты ответа "выигрыша"
 let phraseRandom = Math.round(Math.random() * 3);
 let answerPhrase;
 if ((phraseRandom === 1)) {
@@ -63,17 +26,22 @@ if ((phraseRandom === 1)) {
                            answerPhrase = `Сейчас обалдеешь. Я знаю, что ты загадал ${answerNumber }! Да?`;
                         }
 
-                        answerField.innerText = answerPhrase;
+answerField.innerText = answerPhrase;
+                        
 
+    // Кнопка "заново"
 document.querySelector('#btnRetry').addEventListener('click', function () {
     minValue = 0;
     maxValue = 100;
     orderNumber = 0;
-    gameModal.classList.remove('game-start-active');
-    firstModal.classList.add('modal-active');
 
-    minValue = +document.querySelector('#min').value;
-    maxValue = +document.querySelector('#max').value;
+    minValue = parseInt(prompt('Минимальное знание числа для игры','-999'));
+    maxValue = parseInt(prompt('Максимальное знание числа для игры','999'));
+    minValue = minValue || -999;
+    maxValue = maxValue || 999;
+    minValue < -999 ? minValue = -999 : minValue
+    maxValue > 999 ? maxValue = 1000 : maxValue;
+    alert(`Загадайте любое целое число от ${minValue} до ${maxValue}, а я его угадаю`);
 
     answerNumber  = Math.floor((minValue + maxValue) / 2); 
     orderNumber = 1; 
@@ -82,7 +50,7 @@ document.querySelector('#btnRetry').addEventListener('click', function () {
     orderNumberField = document.querySelector('#orderNumberField');
 
     orderNumberField.innerText = orderNumber;
-       
+
     let phraseRandom = Math.round(Math.random() * 3);
     let answerPhrase;
     if ((phraseRandom === 1)) {
@@ -94,9 +62,9 @@ document.querySelector('#btnRetry').addEventListener('click', function () {
                             }
 
                             answerField.innerText = answerPhrase;
-
 })
 
+// Кнопка "больше"
 document.querySelector('#btnOver').addEventListener('click', function () {
     if (gameRun){
         if (minValue === maxValue)
@@ -111,7 +79,6 @@ document.querySelector('#btnOver').addEventListener('click', function () {
                 answerPhrase = `Ну и задачка...\n\u{1F612}`;
             }
         }    
-
             answerField.innerText = answerPhrase; 
             gameRun = false; 
         } else {
@@ -119,7 +86,6 @@ document.querySelector('#btnOver').addEventListener('click', function () {
             answerNumber  = Math.floor((minValue + maxValue) / 2); 
             orderNumber++; 
             orderNumberField.innerText = orderNumber; 
-            
             let phraseRandom = Math.round(Math.random() * 3);
             let answerPhrase;
             if ((phraseRandom === 1)) {
@@ -134,6 +100,7 @@ document.querySelector('#btnOver').addEventListener('click', function () {
                     }
 })
 
+// Кнопка "меньше"
 document.querySelector('#btnLess').addEventListener('click', function () {
     if (gameRun){
         if (minValue === maxValue)
@@ -148,7 +115,6 @@ document.querySelector('#btnLess').addEventListener('click', function () {
                 answerPhrase = `Ну и задачка...\n\u{1F612}`;
             }
         }  
-
             answerField.innerText = answerPhrase;
             gameRun = false;
         } else {
@@ -170,21 +136,22 @@ document.querySelector('#btnLess').addEventListener('click', function () {
                     }
 })
 
-
+// Кнопка "верно"
 document.querySelector('#btnEqual').addEventListener('click', function () {
     if (gameRun){
-        let phraseRandom = Math.round(Math.random() * 3);
-        let answerPhrase;
-        if (phraseRandom === 1) {
-                answerPhrase = `Я всегда угадываю\n\u{1F44C}`;
-            } else if (answerPhrase = (phraseRandom === 2)) {
-                answerPhrase = `Мастер в здании\n\u{1F60E}`;
-            } else {
-                answerPhrase = `Я справился, а ты бы смог?\n\u{1F525}`;
-            }
-        answerField.innerText = answerPhrase;
+        const phraseRandom = Math.round( Math.random() * 2);
+        switch (phraseRandom) {
+            case 0:
+                answertext = `Я всегда угадываю\n\u{1F44C}`;
+                break;
+            case 1:
+                answertext = `Мастер в здании\n\u{1F60E}`;
+            break;
+            case 2:
+                answertext = `Я справился, а ты бы смог?\n\u{1F525}`;
+            break;
+        }
+        answerField.innerText = answertext;
         gameRun = false;
-        firstPage.classList.remove('greeting-non-active');
-        gameModal.classList.remove('game-start-active');
     }
 })
